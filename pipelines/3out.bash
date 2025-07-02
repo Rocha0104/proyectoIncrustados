@@ -17,6 +17,6 @@ samples/configs/deepstream-app/config_infer_primary.txt ! \
       h264parse ! tee name=e \
   e. ! queue ! mp4mux ! filesink location=output.mp4 \
   e. ! queue ! rtph264pay config-interval=1 pt=96 ! \
-        udpsink host=192.168.1.149 port=5000 \
+        udpsink host=192.168.1.149 port=8001 \
                 sync=false async=false
 
