@@ -26,11 +26,11 @@ queue ! nvinfer name=secondary-infer unique-id=2 \
 samples/configs/deepstream-app/config_infer_secondary_carmake.txt ! \
 queue ! nvvideoconvert ! nvdsosd process-mode=HW_MODE ! \
 nvvideoconvert ! 'video/x-raw(memory:NVMM),format=NV12' ! \
-tee name=t \
-t. ! queue ! nvoverlaysink sync=false \
-t. ! queue ! nvv4l2h264enc insert-sps-pps=true bitrate=4000000 \
-  iframeinterval=30 ! h264parse ! tee name=e \
-e. ! queue ! mp4mux ! filesink location=output.mp4 async=false \
-e. ! queue ! rtph264pay config-interval=1 pt=96 ! \
-udpsink host=192.168.1.149 port=8001 sync=false async=false
+tee name=dis \
+dis. ! queue ! nvoverlaysink sync=false \
+dis. ! queue ! nvv4l2h264enc insert-sps-pps=true bitrate=4000000 \
+  iframeinterval=30 ! h264parse ! tee name=ex \
+ex. ! queue ! mp4mux ! filesink location=$2 async=false -e \
+ex. ! queue ! rtph264pay config-interval=1 pt=96 ! \
+udpsink host=$1 port=8001 sync=false async=false
 
