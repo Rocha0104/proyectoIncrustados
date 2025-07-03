@@ -1,5 +1,5 @@
 DISPLAY=:0.0 gst-launch-1.0 -e \
-    uridecodebin uri=file://$3 name=srcbin \
+    uridecodebin uri=file://$1 name=srcbin \
     srcbin. ! queue ! nvvideoconvert ! 'video/x-raw(memory:NVMM),format=NV12' ! queue ! mux.sink_0 \
     nvstreammux name=mux batch-size=1 width=1920 height=1080 live-source=0 ! queue \
     ! nvinfer name=primary-infer unique-id=1 \
@@ -16,6 +16,6 @@ DISPLAY=:0.0 gst-launch-1.0 -e \
     t. ! queue ! nvoverlaysink sync=false \
     t. ! queue ! nvv4l2h264enc bitrate=4000000 insert-sps-pps=1 iframeinterval=30 ! h264parse \
     ! tee name=e \
-    e. ! queue ! mp4mux ! filesink location=$2 -e\
-    e. ! queue ! rtph264pay config-interval=1 pt=96 ! udpsink host=$1 port=8001 sync=false async=false
+    e. ! queue ! mp4mux ! filesink location=$3 -e\
+    e. ! queue ! rtph264pay config-interval=1 pt=96 ! udpsink host=$2 port=8001 sync=false async=false
 
